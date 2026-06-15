@@ -5,6 +5,8 @@ Entity Matching (EM), the task of determining whether two records refer to the s
 
 This work builds on the [DITTO](https://github.com/megagonlabs/ditto/tree/master) pipeline for fine-tuning a PLM for EM, utilizing its contained datasets. See the [data](data) folder for details.
 
+![prisem_system.png](prisem_system.png)
+
 ## Requirements
 1. Python 3.7.13
 2. For list of dependencies, see [requirements.txt](requirements.txt)
