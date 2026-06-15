@@ -8,8 +8,17 @@ This work builds on the [DITTO](https://github.com/megagonlabs/ditto/tree/master
 ![prisem_system.png](prisem_system.png)
 
 ## Requirements
-1. Python 3.7.13
-2. For list of dependencies, see [requirements.txt](requirements.txt)
+The requirements for this repository are split into two parts: (1) requirements for the PLM/DITTO-based model training and (2) the requirements for the LLM/Jellyfish based model training. 
+
+(1) DITTO Requirements
+
+-----> Python 3.7.13, depenencies can be found in [requirements.txt](requirements.txt).
+
+(2) Jellyfish Requirements
+
+-----> Python 3.9.18, depenencies can be found in [requirements_jellyfish.txt](requirements_jellyfish.txt).
+
+It is reccomended to create seperate virtual enviroments for both models, and to route accordingly via [run_prisem.sh](run_prisem.sh) and [run_jellyfish_worker.sh](run_jellyfish_worker.sh) per the example. 
 
 ## Quick Start
 To run an allocation:
