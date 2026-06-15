@@ -12,8 +12,8 @@
 
 # Main pipeline runs in the working Ditto environment.
 # Jellyfish is invoked later via run_jellyfish_worker.sh in the LLM env.
-module load python/3.7.13/jz4yxoc
-source ../../ditto/myenv/bin/activate
+# module load python/3.7.13/jz4yxoc
+# source ../../ditto/myenv/bin/activate
 
 mkdir -p logs
 export PYTHONUNBUFFERED=1
@@ -28,22 +28,25 @@ if [[ -z "${HUGGINGFACE_HUB_TOKEN:-}" ]]; then
   fi
 fi
 
+# gather the user defined parameters
+dataset="${1:-wdc_all_medium}"
+budget="${2:-10000}"
+alloc="${3:-confidence}" # available allocations: uniform, conservative, greedy, and confidence
+
 # run the train and evaluation script
-for ALLOC in uniform conservative greedy confidence; do
-  echo "======== Running $ALLOC allocation ========"
-  python train_eval_prisem.py \
-    --mode all \
-    --task wdc_all_medium \
-    --budget 10000 \
-    --allocation "$ALLOC" \
-    --methods sim,rf,ditto,jellyfish \
-    --costs sim:0,rf:1,ditto:2,jellyfish:3 \
-    --save_model \
-    --hf_model NECOUDBFM/Jellyfish-8B \
-    --hf_4bit \
-    --jellyfish_use_subprocess \
-    --jellyfish_runner ./run_jellyfish_worker.sh \
-    --shuffle_inference \
-    --output "allocation_${ALLOC}_wdc4_med_6000.jsonl"
-  echo "======== $ALLOC allocation completed ========"
-done
+echo "======== Running $alloc allocation ========"
+python train_eval_prisem.py \
+  --mode all \
+  --task "$dataset" \
+  --budget "$budget" \
+  --allocation "$alloc" \
+  --methods sim,rf,ditto,jellyfish \
+  --costs sim:0,rf:1,ditto:2,jellyfish:3 \
+  --save_model \
+  --hf_model NECOUDBFM/Jellyfish-8B \
+  --hf_4bit \
+  --jellyfish_use_subprocess \
+  --jellyfish_runner ./run_jellyfish_worker.sh \
+  --shuffle_inference \
+  --output "allocation_${alloc}_${budget}.jsonl"
+echo "======== $ALLOC allocation completed ========"
